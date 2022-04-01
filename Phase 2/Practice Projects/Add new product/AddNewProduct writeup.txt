@@ -1,0 +1,12 @@
+Project Writeup
+
+Project Name:Adding New Product in the Database
+
+Project Description:
+Created a servlet-based web application that shows a form to add new products. 
+A MySQL database  created to store product data. 
+The form data validated, and a row added to the database.
+ All database processing is done using Hibernate.
+
+
+

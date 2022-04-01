@@ -1,0 +1,168 @@
+Spring Security Authentication
+
+1)MyUserDetails :-
+package com.project.SpringSecurity.entities;
+
+import java.util.Collection;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+
+public class MyUserDetails implements UserDetails{
+
+	private static final long serialVersionUID = 1L;
+	private String userName;
+	private String password;
+	
+	public MyUserDetails() {
+	
+	}
+	
+	public MyUserDetails(User user) {
+		this.userName = user.getName();
+		this.password = user.getPassword();
+	}
+	
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		return null;
+	}
+
+	@Override
+	public String getPassword() {
+		return password;
+	}
+
+	@Override
+	public String getUsername() {
+		return userName;
+	}
+
+	@Override
+	public boolean isAccountNonExpired() {
+		return true;
+	}
+
+	@Override
+	public boolean isAccountNonLocked() {
+		return true;
+	}
+
+	@Override
+	public boolean isCredentialsNonExpired() {
+		return true;
+	}
+
+	@Override
+	public boolean isEnabled() {
+		return true;
+	}
+
+}
+2)User :-
+package com.project.SpringSecurity.entities;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name="user")
+public class User {
+
+	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
+	private Integer id;
+	
+	private String name;
+	
+	private String password;
+	
+
+	
+	public User() {
+		super();
+	}
+
+	public User(String name, String password) {
+		super();
+		this.name = name;
+		this.password = password;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+}
+3)WebSecurityConfig :-
+package com.project.SpringSecurity;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
+@SuppressWarnings("deprecation")
+@Configuration
+@EnableWebSecurity
+public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+
+	Logger logger = LoggerFactory.getLogger(WebSecurityConfig.class);
+
+	@Autowired
+	UserDetailsService userDetailsService;
+
+	@Bean
+	public PasswordEncoder getPasswordEncoder() {
+		return NoOpPasswordEncoder.getInstance();
+	}
+
+	@Autowired
+	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+		auth.userDetailsService(userDetailsService);
+	}
+
+	@Override
+	protected void configure(HttpSecurity http) throws Exception {
+		http.authorizeRequests()
+				.antMatchers("/", "/index").permitAll()
+				.anyRequest().authenticated()
+			.and()
+				.formLogin()
+				.loginPage("/login")
+				.defaultSuccessUrl("/welcome")
+				.failureUrl("/login?error=true")
+				.permitAll()
+			.and()
+				.logout()
+				.logoutSuccessUrl("/login?logout=true")
+				.invalidateHttpSession(true)
+				.permitAll()
+			.and()
+				.csrf()
+				.disable();
+	}
+}

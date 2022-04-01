@@ -1,0 +1,12 @@
+Project Writeup
+
+Project Name:FLYAway Master
+
+Project Description:
+Created a ticket-booking portal that lets people book flights on their website
+ There is an admin backend with the following features:
+
+● An admin login page where the admin can change the password after login, if he wishes
+● A master list of places for source and destination
+● A master list of airlines
+● A list of flights where each flight has a source, destination, airline, and ticket price

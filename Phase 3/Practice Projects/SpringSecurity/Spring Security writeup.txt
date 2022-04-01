@@ -1,0 +1,11 @@
+Project Writeup
+
+Project Name: Spring Security with Authentication
+
+Project Description:
+Created a application to add more flexibility rather than using the standard scenario in building Spring Security.
+
+● A few of the source code are tracked on GitHub repositories.
+I have documented the tracked  files which are ignored during the final push to the GitHub repository.
+
+

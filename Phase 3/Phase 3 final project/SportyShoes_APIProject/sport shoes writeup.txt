@@ -1,0 +1,11 @@
+Project Writeup
+
+Project Name:an E-commerce Website for Sporty Shoes 
+
+Project Description:
+Created a application to launch their e-commerce portal sportyshoes.com..
+
+● Presented the specification document which has the product’s capabilities, appearance, and user interactions
+● Explained the Java concepts used in the project 
+● Discussed the generic features of the product:
+● There is an admin to manage the website. An administrator login is required to access the admin page. 

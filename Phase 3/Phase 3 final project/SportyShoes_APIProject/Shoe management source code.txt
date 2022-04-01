@@ -1,0 +1,430 @@
+Shoe Management Project
+
+1)Admin :-
+package com.example.demo.model;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+import org.springframework.transaction.annotation.EnableTransactionManagement;  
+
+//@author Kavitha S
+
+@Entity
+@Table(name= "admin") 
+@EnableTransactionManagement
+public class Admin { 
+
+
+	@Id 
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "ID", updatable = false, nullable = false)
+	private int ID;
+	
+	@Column(name = "admin_id")
+	private String adminId;
+	
+	@Column(name = "admin_pwd")
+	private String pwd;
+
+	public int getID() {
+		return ID;
+	}
+
+	public void setID(int iD) {
+		ID = iD;
+	}
+
+	public String getAdminId() {
+		return adminId;
+	}
+
+	public void setAdminId(String adminId) {
+		this.adminId = adminId;
+	}
+
+	public String getPwd() {
+		return pwd;
+	}
+
+	public void setPwd(String pwd) {
+		this.pwd = pwd;
+	}
+	
+	
+}
+2)Categories :-
+package com.example.demo.model;
+
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.NamedAttributeNode;
+import javax.persistence.NamedEntityGraph;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
+//@author Kavitha S
+
+@Entity
+@Table(name = "shoe_category")
+
+
+@NamedEntityGraph(name="graph.Categorys.products", attributeNodes = @NamedAttributeNode(value="products"))
+
+public class Categorys {
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "Id")
+	private int categoryId;
+
+	@Column(name = "name")
+	private String name;
+
+	@OneToMany(mappedBy = "category", fetch = FetchType.EAGER,cascade = CascadeType.ALL, orphanRemoval = true)
+	private Set<Product> products = new HashSet<Product>();
+	
+	
+
+	public Categorys(int categoryId, String name, Set<Product> products) {
+		super();
+		this.categoryId = categoryId;
+		this.name = name;
+		this.products = products;
+	}
+
+	public Categorys() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	public int getCategoryId() {
+		return categoryId;
+	}
+
+	public void setCategoryId(int categoryId) {
+		this.categoryId = categoryId;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public Set<Product> getProducts() {
+		return products;
+	}
+
+	public void setProducts(Set<Product> products) {
+		this.products = products;
+	}
+
+	
+}
+3)Colour :-
+package com.example.demo.model;
+
+//@author Kavitha S
+
+public enum Color {
+
+	Blue("Blue"), Black("Black"), White("White"), Brown("Brown");
+
+	private String name;
+
+	private Color(String name) {
+		this.name = name;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+}
+4)product :-
+package com.example.demo.model;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+//@author Kavitha S
+
+@Entity
+@Table(name = "shoe_product")
+
+public class Product {
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "productId")
+	private int productId;
+
+	@Column(name = "name")
+	private String name;
+
+
+	@ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.PERSIST)
+	@JoinColumn(name = "category_id", nullable = true)
+	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+	@JsonIgnoreProperties(ignoreUnknown = true)
+	private Categorys category;
+
+	@Enumerated(EnumType.STRING)
+	private Season season;
+
+	@Enumerated(EnumType.STRING)
+	private ShoeType shoetype;
+
+	@Column(name = "price")
+	private float price;
+
+	@Enumerated(EnumType.STRING)
+	private Color color;
+5)PurchaseItem :-
+package com.example.demo.model;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;  
+
+//@author Kavitha S
+
+@Entity
+@Table(name= "purchase_items")   
+public class PurchaseItem { 
+
+	@Id 
+	//@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "purchase_id")
+	private int purchaseId;
+	
+	@Column(name = "product_id")
+	private int productId;
+
+	@Column(name = "user_id")
+	private int userId;
+
+	@Column(name = "purch_category")
+	private int purchCategory;
+
+	@Column(name = "purchase_date")
+	private String purchaseDate;
+6)Season :-
+package com.example.demo.model;
+
+//@author Kavitha S
+
+public enum Season {
+	
+	 Winter("Winter"), Summer("Summer"), Rainy("Rainy") ;
+
+   private String name;
+
+
+	private Season(String name) {
+	this.name = name;
+}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	
+7)Shoe Type :-
+package com.example.demo.model;
+
+
+//@author Kavitha S
+
+public enum ShoeType {
+	
+	 Male("Male"), Female("Female"), Both("Both") ;
+
+   private String name;
+
+
+	private ShoeType(String name) {
+	this.name = name;
+}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+8)User :-
+package com.example.demo.model;
+
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;  
+
+//@author Snehal
+
+@Entity
+@Table(name= "shoe_users")   
+public class User { 
+
+
+	@Id 
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "ID")
+	private int ID;
+	
+	@Column(name = "fname")
+	private String fname;
+	
+	@Column(name = "lname")
+	private String lname;
+	
+	@Column(name = "address")
+	private String address;
+
+	@Column(name = "city")
+	private String city;
+
+
+	@Column(name = "zipcode")
+	private long zipcode;
+
+	@Column(name = "state")
+	private String state;
+
+	
+	@Column(name = "country")
+	private String country;
+
+	@Column(name = "age")
+	private int age;
+
+	@Column(name = "contact_no")
+	private long contact_no;
+
+	public int getID() {
+		return ID;
+	}
+
+	public void setID(int iD) {
+		ID = iD;
+	}
+
+	public String getFname() {
+		return fname;
+	}
+
+	public void setFname(String fname) {
+		this.fname = fname;
+	}
+
+	public String getLname() {
+		return lname;
+	}
+
+	public void setLname(String lname) {
+		this.lname = lname;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+	public long getZipcode() {
+		return zipcode;
+	}
+
+	public void setZipcode(long zipcode) {
+		this.zipcode = zipcode;
+	}
+
+	public String getCountry() {
+		return country;
+	}
+
+	public void setCountry(String country) {
+		this.country = country;
+	}
+
+	public int getAge() {
+		return age;
+	}
+
+	public void setAge(int age) {
+		this.age = age;
+	}
+
+	public long getContact_no() {
+		return contact_no;
+	}
+
+	public void setContact_no(long contact_no) {
+		this.contact_no = contact_no;
+	}
+
+	public String getState() {
+		return state;
+	}
+
+	public void setState(String state) {
+		this.state = state;
+	}  
+	
+		
+
+}
+ 

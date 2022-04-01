@@ -1,0 +1,11 @@
+Project Writeup
+
+Project Name:Product Detail Portal
+
+Project Description:
+Created a servlet-based web application that shows a form to enter product details. Captured the details in a servlet and then displayed the data that was entered.
+
+ The administration can do the following things via this application:
+There is a Product class to store the details of the product
+The servlet puts the form data into the Product class and stores it in the session
+A second JSP takes the product info from the session and display it to the user.
