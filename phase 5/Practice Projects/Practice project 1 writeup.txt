@@ -1,0 +1,16 @@
+Project Writeup
+
+Project Name:Automate Web Application
+
+Project Description:
+Created an automation script that automated the basic functionalities like registration and login. 
+
+ 
+
+ The administration can do the following things via this application:
+1. Created a Selenium WebDriver instance
+2. Configured the Web browser
+3. Navigated to the web URL
+4. Locating the Web Element
+5. Performed Action on the Located Web Element
+6. Verified & Validated The Action
